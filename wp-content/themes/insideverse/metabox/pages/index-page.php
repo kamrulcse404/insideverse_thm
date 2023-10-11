@@ -205,7 +205,7 @@ add_filter('cmb2_meta_boxes', 'metabox_for_index_portfolio');
 
 
 
-
+// category extra field 
 function cmb2_add_metabox_to_taxonomy_page()
 {
     $taxonomy = 'portfolio_category'; // Replace with your custom taxonomy name
