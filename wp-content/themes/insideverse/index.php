@@ -12,47 +12,59 @@ get_header();
 
 <!-- ========== Section Banner ========== -->
 <section class="section-banner">
-    <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/hero-bg.png" alt="">
+    <img src="<?php echo get_post_meta(get_the_ID(), 'index-banner-image', true);  ?>" alt="">
 </section><!-- .section-banner -->
 
 
 <!-- ========== Section About ========== -->
-<section class="section-about">
+<section class="section-about" style="background-image: url('<?php echo get_post_meta(get_the_ID(), 'index-about-background', true);  ?>')">
     <div class="container">
         <div class="about">
 
             <div class="about__content">
                 <div class="about__text-box">
-                    <h3 class="heading-tertiary">Welcome to Sid Vishnu's Gaming Universe</h3>
-                    <p>Hello! I'm Sid Vishnu, a game designer based in the UK. I’m a narrative designer and story writer I specialize in creating stories and designing games that take players on unforgettable journeys.</p>
-                    <p> Here, you'll discover a collection of my projects, each one a blend of captivating stories and interactive gameplay. From epic adventures to intimate experiences, every game is a unique world waiting to be explored.</p>
+                    <h3 class="heading-tertiary"><?php echo get_post_meta(get_the_ID(), 'index-about-content-title', true);  ?></h3>
+                    <p><?php echo get_post_meta(get_the_ID(), 'index-about-content-description-one', true);  ?></p>
+                    <p><?php echo get_post_meta(get_the_ID(), 'index-about-content-description-two', true);  ?></p>
                     <a href="#portfolio" class="button-btn btn-color-blue-lotus">View My Works</a>
                 </div>
                 <div class="about__img-box">
-                    <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/about-img.png" alt="Sidvishnu picture">
+                    <img src="<?php echo get_post_meta(get_the_ID(), 'index-about-content-image', true);  ?>" alt="Sidvishnu picture">
                 </div>
             </div>
 
             <div class="services__content">
-                <h2 class="heading-secondary color-white">What I Do</h2>
+                <h2 class="heading-secondary color-white"><?php echo get_post_meta(get_the_ID(), 'index-service-title', true);  ?></h2>
                 <div class="border-blue-lotus"></div>
 
                 <div class="services__box">
-                    <div class="services__box-item">
-                        <h4>Narrative Design</h4>
-                        <p>As a narrative designer, I specialize in shaping immersive worlds and compelling stories within games. Let's collaborate to create unforgettable journeys that leave a lasting impact.
 
-                        </p>
-                    </div>
-                    <div class="services__box-item">
-                        <h4>Game Designer</h4>
-                        <p>I'm used to working with different teams to translate design ideas into reality. So I've got a solid grasp of design, but I'm also a great team player!</p>
-                    </div>
-                    <div class="services__box-item">
-                        <h4>World Builder</h4>
-                        <p>To build a consistent world with unique characters is my container goal every time I want to give life to a new narrative
-                            project.</p>
-                    </div>
+                    <?php
+                    $serviceItems = get_post_meta(get_the_ID(), "about-service-item", true);
+                    if (count($serviceItems) > 0) {
+                        foreach ($serviceItems as $key => $serviceItem) {
+                            $title = $des = '';
+                            if (isset($serviceItem['about-service-item-title'])) {
+                                $title = esc_html($serviceItem['about-service-item-title']);
+                            }
+                            if (isset($serviceItem['about-service-item-title'])) {
+                                $des = esc_html($serviceItem['about-service-item-description']);
+                            }
+
+                    ?>
+
+                            <div class="services__box-item">
+                                <h4><?php echo $title ?></h4>
+                                <p><?php echo $des ?></p>
+                            </div>
+
+
+                    <?php
+                        }
+                    }
+                    ?>
+
+
                 </div>
             </div>
 
@@ -64,51 +76,85 @@ get_header();
 <section class="section-portfolio" id="portfolio">
     <div class="container">
         <div class="portfolio">
-            <h2 class="heading-secondary color-black">My Portfolio</h2>
+            <h2 class="heading-secondary color-black"><?php echo get_post_meta(get_the_ID(), 'index-portfolio-title', true);  ?></h2>
             <div class="border-blue-lotus"></div>
+
+
             <ul class="portolio-filter">
                 <li class="mixitup-control-active" data-filter="all">All</li>
-                <li data-filter=".three-d-work">3d Works </li>
-                <li data-filter=".game-prototype">Game Prototypes</li>
-                <li data-filter=".narrative-works">Narrative Works </li>
+                <?php
+                $categories = get_terms(array(
+                    'taxonomy' => 'portfolio_category',
+                    'hide_empty' => false,
+                ));
+
+                if (!empty($categories)) {
+                    foreach ($categories as $category) {
+                        echo '<li data-filter=".' . $category->slug . '">' . $category->name . '</li>';
+                    }
+                }
+                ?>
             </ul>
+
 
             <div class="portfolio__content">
                 <div class="portfolio__box">
-                    <div class="portfolio__box-item mix three-d-work">
-                        <div class="portfolio__text-box">
-                            <h4><a href="single-portfolio-name.html">Architectural Marvels: 3D Environments for Virtual Worlds</a></h4>
-                            <p>Step into a world where architectural wonders come to life in stunning 3D. Explore intricately detailed buildings, from ancient ruins to futuristic megastructures.</p>
-                            <a href="single-portfolio-name.html" class="btn-underline">View Details</a>
-                        </div>
-                        <div class="portfolio__img-box">
-                            <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/portfolio/portfolio-1.png" alt="Portolio image">
-                        </div>
-                    </div>
+                    <?php
+                    $args = array(
+                        'post_type' => 'portfolio',
+                        'posts_per_page' => -1,
+                    );
 
-                    <div class="portfolio__box-item mix game-prototype">
-                        <div class="portfolio__text-box">
-                            <h4><a href="single-portfolio-name.html">Architectural Marvels: 3D Environments for Virtual Worlds</a></h4>
-                            <p>Step into a world where architectural wonders come to life in stunning 3D. Explore intricately detailed buildings, from ancient ruins to futuristic megastructures.</p>
-                            <a href="single-portfolio-name.html" class="btn-underline">View Details</a>
-                        </div>
-                        <div class="portfolio__img-box">
-                            <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/portfolio/portfolio-2.png" alt="Portolio image">
-                        </div>
-                    </div>
+                    $query = new WP_Query($args);
 
-                    <div class="portfolio__box-item mix narrative-works three-d-work">
-                        <div class="portfolio__text-box">
-                            <h4><a href="single-portfolio-name.html">Architectural Marvels: 3D Environments for Virtual Worlds</a></h4>
-                            <p>Step into a world where architectural wonders come to life in stunning 3D. Explore intricately detailed buildings, from ancient ruins to futuristic megastructures.</p>
-                            <a href="single-portfolio-name.html" class="btn-underline">View Details</a>
-                        </div>
-                        <div class="portfolio__img-box">
-                            <img src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/portfolio/portfolio-3.png" alt="Portolio image">
-                        </div>
-                    </div>
+                    // Check if there are any portfolio items
+                    if ($query->have_posts()) {
+                        while ($query->have_posts()) {
+                            $query->the_post();
+
+                            $categories = get_the_terms(get_the_ID(), 'portfolio_category');
+
+                            // Check if there are categories
+                            if ($categories && !is_wp_error($categories)) {
+                                $category_slugs = array();
+                                foreach ($categories as $category) {
+                                    $category_slugs[] = $category->slug;
+                                }
+                                $category_list = implode(' ', $category_slugs);
+                            }
+
+
+
+                    ?>
+
+                            <div class="portfolio__box-item mix <?php echo $category_list; ?>">
+                                <div class="portfolio__text-box">
+                                    <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                                    <p><?php the_excerpt(); ?></p>
+
+                                    <a href="<?php the_permalink(); ?>" class="btn-underline">View Details</a>
+                                </div>
+                                <div class="portfolio__img-box">
+                                    <?php
+                                    if (has_post_thumbnail()) {
+                                        the_post_thumbnail(); // You can use a different image size here
+                                    } else {
+                                        echo '<img src="' . esc_url(get_template_directory_uri()) . '/assets/images/default-thumbnail.jpg" alt="Default Thumbnail">';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+                    <?php
+                        }
+                        wp_reset_postdata();
+                    } else {
+                        echo 'No portfolio items found.';
+                    }
+                    ?>
                 </div>
             </div>
+
         </div>
     </div>
 </section><!-- .section-portfolio -->

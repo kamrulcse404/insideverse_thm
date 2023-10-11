@@ -1,5 +1,11 @@
 <?php
 
+/* --------------Post Thumbnails Add-------------- */
+
+add_theme_support('post-thumbnails');
+set_post_thumbnail_size(600, 337, true);
+add_image_size('single-thumbnail', 600, 337, true);
+
 // include title & js_css  
 add_theme_support('title-tag');
 require_once('enqueue/enqueue_css_js.php');
@@ -33,3 +39,13 @@ function register_footer_menus()
     );
 }
 add_action('after_setup_theme', 'register_footer_menus');
+
+
+//cmb2
+require_once('metabox/init.php');
+require_once('metabox/functions.php');
+
+// custom functions 
+require_once('functions/custom-post-type.php');
+
+

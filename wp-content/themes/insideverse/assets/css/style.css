@@ -221,7 +221,7 @@ ul {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url(/assets/images/about-bg.png);
+    /* background-image: url(/assets/images/about-bg.png); */
     padding: 70px 0 0;
 }
 
